@@ -2,7 +2,7 @@ const API_URL = "https://mcuapi.herokuapp.com/api/v1/movies?page=1&limit=100";
 const SECOND_API_URL = "https://mcuapi.herokuapp.com/api/v1/tvshows?page=1&limit=100"
 const API_SEARCH = "https://mcuapi.herokuapp.com/api/v1/movies?page=1&limit=10&filter="
 const SECOND_API_SEARCH = "https://mcuapi.herokuapp.com/api/v1/tvshows?page=1&limit=10&filter="
-
+document.querySelector(".films").innerHTML = "";
 getFilms(API_URL);
 getFilms(SECOND_API_URL);
 
@@ -43,21 +43,28 @@ function showFilms(data) {
 
 const form = document.querySelector("form");
 const search = document.querySelector(".header__search");
-form.addEventListener("input", (e)=>{
+let timeoutId; // Variable to store the timeout ID
+
+form.addEventListener("input", (e) => {
     e.preventDefault();
 
-    const apiSearchUrl= `${API_SEARCH}title=${search.value}`
-    const apiSearchUrlSec= `${SECOND_API_SEARCH}title=${search.value}`
-    if (search.value){
-        document.querySelector(".films").innerHTML = "";
+    clearTimeout(timeoutId);
 
-        getFilms(apiSearchUrl);
-        getFilms(apiSearchUrlSec);
-    }
-    if (search.value===""){
-        getFilms(API_URL);
-        getFilms(SECOND_API_URL);
-    }
+    const apiSearchUrl = `${API_SEARCH}title=${search.value}`;
+    const apiSearchUrlSec = `${SECOND_API_SEARCH}title=${search.value}`;
+
+    timeoutId = setTimeout(() => {
+        if (search.value) {
+            document.querySelector(".films").innerHTML = "";
+
+            getFilms(apiSearchUrl);
+            getFilms(apiSearchUrlSec);
+        } else {
+            document.querySelector(".films").innerHTML = "";
+            getFilms(API_URL);
+            getFilms(SECOND_API_URL);
+        }
+    }, 300);
 });
 
 let lastScrollTop = 0;
