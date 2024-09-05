@@ -9,11 +9,25 @@ body{
     font-family: "Poppins", sans-serif;
     font-weight: 100;
     font-style: normal;
+    padding-top: 70px; /* Высота вашего заголовка */
 }
 .container{
-    max-width: 1200px;
     margin: 0 auto;
 }
+header {
+    transition: top 0.3s;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    background-color: #09090c;
+}
+
+.hidden {
+    top: -100px;
+}
+
+
 .header__content{
     display: flex;
     align-items: center;
@@ -21,14 +35,22 @@ body{
     padding: 16px;
     height: 60px;
 }
-.header__logo{
+.header__logo {
+    position: relative;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
-    font-style: normal;
     font-size: 32px;
     text-decoration: none;
-    color: white;
+    color: rgb(255, 255, 255);
+    text-shadow:
+            4px 0 10px rgba(106, 17, 203, 0.5), /* Первый цвет градиента */
+            -4px 0 10px rgba(37, 117, 252, 0.5), /* Второй цвет градиента */
+            0 0 20px rgba(106, 17, 203, 0.3), /* Плавный переход */
+            0 0 30px rgba(37, 117, 252, 0.3); /* Плавный переход */
+
 }
+
+
 .header__search{
     padding: 8px;
     height: 40px;
@@ -49,18 +71,28 @@ body{
     width: 240px;
     margin: 10px;
     position: relative;
+    transition: height 0.5s ease, transform 0.3s ease;
 }
-.film__cover-inner{
+.film__cover-inner {
     position: relative;
     height: 360px;
+}
+
+.film:hover {
+    transform: scale(1.05);
 }
 .film__cover{
     max-width: 100%;
     height: 100%;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-sizing: border-box;
 }
 .film__cover-darkened {
     background-color: black;
-    opacity: 0.5;
+    opacity: 0.2;
     position: absolute;
     top: 0;
     left: 0;
@@ -76,7 +108,7 @@ body{
     cursor: pointer;
 }
 .film__info{
-    padding: 10px 0px;
+    padding: 10px 0 0 0;
 }
 .film__title{
     font-size: 16px;

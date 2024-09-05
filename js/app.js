@@ -1,5 +1,7 @@
 const API_URL = "https://mcuapi.herokuapp.com/api/v1/movies?page=1&limit=100";
 const SECOND_API_URL = "https://mcuapi.herokuapp.com/api/v1/tvshows?page=1&limit=100"
+const API_SEARCH = "https://mcuapi.herokuapp.com/api/v1/movies?page=1&limit=10&filter="
+const SECOND_API_SEARCH = "https://mcuapi.herokuapp.com/api/v1/tvshows?page=1&limit=10&filter="
 
 getFilms(API_URL);
 getFilms(SECOND_API_URL);
@@ -17,8 +19,6 @@ async function getFilms(url){
 
 function showFilms(data) {
     const filmsEl = document.querySelector(".films");
-    // Don't clear the filmsEl here
-
     data.data.forEach((film) => {
         console.log(film)
         const filmEl = document.createElement("div");
@@ -40,3 +40,40 @@ function showFilms(data) {
         filmsEl.appendChild(filmEl);
     });
 }
+
+const form = document.querySelector("form");
+const search = document.querySelector(".header__search");
+form.addEventListener("input", (e)=>{
+    e.preventDefault();
+
+    const apiSearchUrl= `${API_SEARCH}title=${search.value}`
+    const apiSearchUrlSec= `${SECOND_API_SEARCH}title=${search.value}`
+    if (search.value){
+        document.querySelector(".films").innerHTML = "";
+
+        getFilms(apiSearchUrl);
+        getFilms(apiSearchUrlSec);
+    }
+    if (search.value===""){
+        getFilms(API_URL);
+        getFilms(SECOND_API_URL);
+    }
+});
+
+let lastScrollTop = 0;
+const header = document.getElementById('header');
+
+window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (scrollTop > lastScrollTop) {
+        // Прокручиваем вниз
+        header.classList.add('hidden');
+    } else if (scrollTop < lastScrollTop && scrollTop > 0) {
+        // Прокручиваем вверх
+        header.classList.remove('hidden');
+    }
+
+    lastScrollTop = scrollTop; // Обновляем последнее положение прокрутки
+});
+
