@@ -62,55 +62,48 @@ form.addEventListener("input", (e) => {
     }, 300);
 });
 
-let lastScrollTop = 0;
-const header = document.getElementById('header');
-
-window.addEventListener('scroll', function() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop) {
-        // Прокручиваем вниз
-        header.classList.add('hidden');
-    } else if (scrollTop < lastScrollTop && scrollTop > 0) {
-        // Прокручиваем вверх
-        header.classList.remove('hidden');
-    }
-
-    lastScrollTop = scrollTop; // Обновляем последнее положение прокрутки
-});
-
-// Modal
 const modalEl = document.querySelector(".modal");
 
 async function openModal(title) {
     const resp = await fetch(`${API_SEARCH}title=${title}`, {
         headers: {
             "Content-Type": "application/json"
-        },
+        }
     });
     const respData = await resp.json();
 
     modalEl.classList.add("modal--show");
     document.body.classList.add("stop-scrolling");
-    console.log(respData[0])
+
+    // Use the generateIframe function to dynamically create the iframe
+    const trailerIframe = generateIframe(respData.data[0].trailer_url);
+
     modalEl.innerHTML = `
     <div class="modal__card">
-      <img class="modal__movie-backdrop" src="${respData.data[0].cover_url}" alt="">
+      <div class="modal__movie-container">
+        <img class="modal__movie-backdrop" src="${respData.data[0].cover_url}" alt="">
+        ${trailerIframe}
+      </div>
+
       <h2>
         <span class="modal__movie-title">${respData.data[0].title}</span>
       </h2>
       <ul class="modal__movie-info">
         <div class="loader"></div>
-        ${respData.data[0].duration ? `<li class="modal__movie-runtime">Duration - ${respData.data[0].duration} min</li>` : ''}
+        <li class="modal__movie-overview">Duration - ${respData.data[0].duration} min</li>
         <li class="modal__movie-overview">Description - ${respData.data[0].overview}</li>
         <li class="modal__movie-overview">Date - ${respData.data[0].release_date}</li>
       </ul>
       <button type="button" class="modal__button-close">Закрыть</button>
     </div>
   `;
+
     const btnClose = document.querySelector(".modal__button-close");
-    btnClose.addEventListener("click", () => closeModal());
+    btnClose.addEventListener("click", () => {
+        closeModal();
+    });
 }
+
 
 function closeModal() {
     modalEl.classList.remove("modal--show");
@@ -127,4 +120,23 @@ window.addEventListener("keydown", (e) => {
         closeModal();
     }
 })
+function generateIframe(trailerUrl) {
+    // Check if the link is from YouTube
+    if (trailerUrl.includes("youtu.be") || trailerUrl.includes("youtube.com/watch")) {
+        // Extract the YouTube video ID
+        const videoId = trailerUrl.split('.be/')[1];
+        return `<iframe id="movieTrailer" class="modal__movie-trailer" width="280" height="157.5" src="https://www.youtube.com/embed/${videoId}" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>`;
+    } else if (trailerUrl.includes("players.brightcove.net")) {
+        // Brightcove link, use the provided URL directly
+        return `<iframe id="movieTrailer" class="modal__movie-trailer" width="280" height="157.5" src="${trailerUrl}" frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>`;
+    } else {
+        // Handle other link types if necessary
+        return "Unsupported link format";
+    }
+}
+
 

@@ -9,24 +9,15 @@ body{
     font-family: "Poppins", sans-serif;
     font-weight: 100;
     font-style: normal;
-    padding-top: 70px; /* Высота вашего заголовка */
 }
 .container{
     margin: 0 auto;
 }
 header {
     transition: top 0.3s;
-    position: fixed;
     width: 100%;
-    top: 0;
-    z-index: 1000;
     background-color: #09090c;
 }
-
-.hidden {
-    top: -100px;
-}
-
 
 .header__content{
     display: flex;
@@ -128,7 +119,7 @@ header {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
-    transition: width 2s;
+    transition: width 3s;
 }
 
 .modal--show {
@@ -146,11 +137,16 @@ header {
     color: #ffffff;
     display: flex;
     flex-direction: column;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-sizing: border-box;
 }
 
 .modal__movie-backdrop {
     width: 200px;
-    margin: 0 auto
+    margin: 0
 }
 
 .modal__movie-info {
@@ -158,14 +154,45 @@ header {
 }
 
 .modal__button-close {
-    padding: 5px;
-    margin: 10px;
+    padding: 15px 20px;
+    margin: 15px;
     align-self: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    font-style: normal;
+    background-color: #7656D6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
-.modal__movie-site {
-    color: #ffd80e
+.modal__button-close:hover {
+    background-color: #5a409e;
+    cursor: pointer;
 }
+.modal__movie-title {
+    margin: 0;
+}
+.modal__movie-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.modal__movie-trailer {
+    width: 360px;
+    height: 200px;
+    margin: 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-sizing: border-box;
+}
+
 
 ul li {
     padding: 5px;
