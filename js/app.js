@@ -75,10 +75,9 @@ async function openModal(title) {
     modalEl.classList.add("modal--show");
     document.body.classList.add("stop-scrolling");
 
-    // Use the generateIframe function to dynamically create the iframe
-    const trailerIframe = generateIframe(respData.data[0].trailer_url);
-
-    modalEl.innerHTML = `
+    if (respData.data[0].trailer_url!== "" || respData.data[0].trailer_url!= null){
+        const trailerIframe = generateIframe(respData.data[0].trailer_url);
+        modalEl.innerHTML = `
     <div class="modal__card">
       <div class="modal__movie-container">
         <img class="modal__movie-backdrop" src="${respData.data[0].cover_url}" alt="">
@@ -97,9 +96,32 @@ async function openModal(title) {
       <button type="button" class="modal__button-close">Закрыть</button>
     </div>
   `;
+    }
+    else{
+        modalEl.innerHTML = `
+    <div class="modal__card">
+      <div class="modal__movie-container">
+        <img class="modal__movie-backdrop" src="${respData.data[0].cover_url}" alt="">
+      </div>
+
+      <h2>
+        <span class="modal__movie-title">${respData.data[0].title}</span>
+      </h2>
+      <ul class="modal__movie-info">
+        <div class="loader"></div>
+        <li class="modal__movie-overview">Duration - ${respData.data[0].duration} min</li>
+        <li class="modal__movie-overview">Description - ${respData.data[0].overview}</li>
+        <li class="modal__movie-overview">Date - ${respData.data[0].release_date}</li>
+      </ul>
+      <button type="button" class="modal__button-close">Закрыть</button>
+    </div>
+  `;
+    }
+
 
     const btnClose = document.querySelector(".modal__button-close");
     btnClose.addEventListener("click", () => {
+        modalEl.innerHTML=``
         closeModal();
     });
 }
